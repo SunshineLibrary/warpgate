@@ -1,5 +1,6 @@
 {
   "name": "warpgate",
+  "version": "0.1.0",
   "description": "A distributed task processing service based on RabbitMQ",
   "keywords": [
     "warpgate"
@@ -7,7 +8,6 @@
     , "queue"
     , "distributed"
   ],
-  "version": "0.1.0",
   "author": {
     "name": "Sunshine Library"
   },
@@ -17,9 +17,6 @@
   },
   "bugs": {
     "url": "http://github.com/SunshineLibrary/warpgate/issues"
-  },
-  "engines": {
-    "node": ">=0.8"
   },
   "main": "lib/warpgate.js",
   "dependencies": {
@@ -33,4 +30,3 @@
     }
   ]
 }
-
