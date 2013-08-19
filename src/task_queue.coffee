@@ -23,7 +23,7 @@ util.inherits(TaskQueue, events.EventEmitter)
 # 3. Create an exchange based on role
 # 4. Bind the newly created queue to the newly created exchange
 # 5. Subscribe to the queue just created
-TaskQueue.prototype.start = () ->
+TaskQueue.prototype.start = (callback) ->
   util.log('Connecting to RabbitMQ server...')
   connect(this)
     .on 'connected', (self) ->
@@ -38,6 +38,12 @@ TaskQueue.prototype.start = () ->
     .on 'bindExchangeOk', (self) ->
       util.log(clc.green('Ready'))
       subscribe(self)
+      if callback
+        callback()
+
+TaskQueue.prototype.end = () ->
+  if this.connection
+    this.connection.end()
 
 # TaskQueue's message handler, transform messages into Task objects.
 # Task handlers can listen on the queue's 'task' event for incoming tasks.

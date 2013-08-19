@@ -1,8 +1,11 @@
 assert = require 'assert'
-taskQueue = require '../src/task_queue'
+TaskQueue = require('../src/task_queue').TaskQueue
 
 describe 'TaskQueue', ->
-  queue= new taskQueue.TaskQueue({}, 'local', 'localhost')
+  queue= new TaskQueue({}, 'local', 'localhost')
+
+  after () ->
+    queue.end()
 
   describe 'on creation', ->
     it 'should set queue name', ->
@@ -10,6 +13,7 @@ describe 'TaskQueue', ->
       assert.equal('warpgate.role.local', queue.exchangeName)
 
   describe 'on start', ->
+
     before ()->
       queue.start()
 
