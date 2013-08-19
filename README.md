@@ -4,20 +4,24 @@ warpgate
 A node.js distributed task processing service based on RabbitMQ.
 
 
-``
+```
+// Define TaskHandler
 LogTaskHandler = function() {}
 
 LogTaskHandler.prototype.handleTask = function(task) {
     console.log(task.action)
 }
 
-warpgate = require('warpgate')
 
+// RabbitMQ connection params; Use default of empty.
 rabbitmqParams = {}
 
-taskService = new warpgate.TaskService(rabbitmqParams, 'role', 'hostname')
+// Config and start TaskService
+TaskService = require('warpgate').TaskService
+
+taskService = new TaskService(rabbitmqParams, 'role', 'hostname')
 
 taskService.setHandler('simple', new LogTaskHandler())
 
 taskService.start()
-``
+```
