@@ -26,10 +26,6 @@
     "amqp": "0.1.4"
     , "cli-color": "0.2.2"
   },
-  "devDependencies": {
-    "mocha": "1.12.0"
-    , "coffee-script": "1.2"
-  },
   "licenses": [
     {
       "type": "MIT"

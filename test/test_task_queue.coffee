@@ -1,0 +1,65 @@
+assert = require 'assert'
+taskQueue = require '../src/task_queue'
+
+describe 'TaskQueue', ->
+  queue= new taskQueue.TaskQueue({}, 'local', 'localhost')
+
+  describe 'on creation', ->
+    it 'should set queue name', ->
+      assert.equal('warpgate.host.localhost', queue.queueName)
+      assert.equal('warpgate.role.local', queue.exchangeName)
+
+  describe 'on start', ->
+    before ()->
+      queue.start()
+
+    it 'should connect', (done) ->
+      queue.on 'connected', -> done()
+
+    it 'should declare queue', (done) ->
+      queue.on 'queueOk', -> done()
+
+    it 'should declare exchange', (done) ->
+      queue.on 'exchangeOk', -> done()
+
+    it 'should bind exchange', (done) ->
+      queue.on 'bindExchangeOk', -> done()
+
+  describe 'on message', ->
+    beforeEach (done)->
+      queue.clear(done)
+
+    afterEach ()->
+      queue.removeAllListeners 'task'
+
+    after (done)->
+      queue.clear(done)
+
+    it 'should offer task', (done) ->
+      queue.exchange.publish '', {id: 1, action: 'hello', params: {}}
+      queue.once 'task', (task) ->
+        assert.equal(task.action, 'hello')
+        done()
+
+    it 'should ignore non-task messages', (done) ->
+      queue.exchange.publish '', {}
+      queue.exchange.publish '', 'hello'
+      queue.once 'task', ->
+        assert(false, 'should not reach here')
+      setTimeout(done, 100)
+
+    it 'should requeue task on failure', (done) ->
+      queue.exchange.publish '', {id: 3, action: 'hello', params: {}}
+      queue.once 'task', (task) ->
+        task.retry(0.1)
+        queue.once 'task', (task) ->
+          assert.equal(task.action, 'hello')
+          done()
+
+    it 'should acknowlege task on success', (done) ->
+      queue.exchange.publish '', {id: 4, action: 'hello', params: {}}
+      queue.once 'task', (task) ->
+        task.done()
+        setTimeout(done, 100)
+        queue.once 'task', (task) ->
+          assert(false, 'should not reach here')
