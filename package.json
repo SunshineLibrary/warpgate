@@ -1,0 +1,32 @@
+{
+  "name": "warpgate",
+  "version": "0.1.0",
+  "description": "A distributed task processing service based on RabbitMQ",
+  "keywords": [
+    "warpgate"
+    , "task"
+    , "queue"
+    , "distributed"
+  ],
+  "author": {
+    "name": "Sunshine Library"
+  },
+  "repository": {
+    "type": "git"
+    , "url": "git://github.com/SunshineLibrary/warpgate.git"
+  },
+  "bugs": {
+    "url": "http://github.com/SunshineLibrary/warpgate/issues"
+  },
+  "main": "lib/warpgate.js",
+  "dependencies": {
+    "amqp": "0.1.4"
+    , "cli-color": "0.2.2"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+      , "url": "http://github.com/SunshineLibrary/warpgate/raw/master/LICENSE-MIT"
+    }
+  ]
+}
