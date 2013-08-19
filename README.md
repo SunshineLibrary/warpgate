@@ -13,7 +13,7 @@ LogTaskHandler.prototype.handleTask = function(task) {
 }
 
 
-// RabbitMQ connection params; Use default of empty.
+// RabbitMQ connection params; Use default if empty.
 rabbitmqParams = {}
 
 // Config and start TaskService
@@ -21,7 +21,7 @@ TaskService = require('warpgate').TaskService
 
 taskService = new TaskService(rabbitmqParams, 'role', 'hostname')
 
-taskService.setHandler('simple', new LogTaskHandler())
+taskService.setHandler('log', new LogTaskHandler())
 
 taskService.start()
 ```
