@@ -7,12 +7,10 @@
 # Put task back onto its TaskQueue after 60 seconds.
 # this.retry(60)
 
-exports.Task = Task = (msg, ackFn) ->
-  this.id = msg .id
-  this.action = msg.action
-  this.src = msg.src
-  this.dest = msg.dest
-  this.params= msg.params
+exports.Task = Task = (id, action, params, ackFn) ->
+  this.id = id
+  this.action = action
+  this.params = params
 
   this.done = () ->
     ackFn()

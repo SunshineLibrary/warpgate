@@ -47,15 +47,21 @@ TaskQueue.prototype.end = () ->
 
 # TaskQueue's message handler, transform messages into Task objects.
 # Task handlers can listen on the queue's 'task' event for incoming tasks.
-TaskQueue.prototype.handleMessage = (message, header, delivderInfo, m) ->
-  util.log 'Received: ' + JSON.stringify(message)
-  if (message.id and message.action)
-    task = new Task message, (isSuccess=true) ->
+TaskQueue.prototype.handleMessage = (message, header, deliveryInfo, m) ->
+  app = deliveryInfo.appId
+  id = deliveryInfo.messageId
+  action = deliveryInfo.type
+  if ( app == 'warpgate' and id and action)
+    task = new Task id, action, message, (isSuccess=true) ->
       if isSuccess
         m.acknowledge()
       else
         m.reject(true)
+    util.log "Received Task: " + JSON.stringify(task)
     this.emit 'task', task
+  else
+    util.log "Ignore Message: " + JSON.stringify(message)
+    m.acknowledge()
 
 # Clears the queue by deleting it and then recreating it.
 TaskQueue.prototype.clear = (callback) ->

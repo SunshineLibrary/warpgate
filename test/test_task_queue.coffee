@@ -40,20 +40,22 @@ describe 'TaskQueue', ->
       queue.clear(done)
 
     it 'should offer task', (done) ->
-      queue.exchange.publish '', {id: 1, action: 'hello', params: {}}
+      queue.exchange.publish '', {},
+        {appId: 'warpgate', messageId: '1', type: 'hello'}
       queue.once 'task', (task) ->
         assert.equal(task.action, 'hello')
         done()
 
     it 'should ignore non-task messages', (done) ->
       queue.exchange.publish '', {}
-      queue.exchange.publish '', 'hello'
+      queue.exchange.publish '', 'hello', {appId: 'warpgate'}
       queue.once 'task', ->
         assert(false, 'should not reach here')
       setTimeout(done, 100)
 
     it 'should requeue task on failure', (done) ->
-      queue.exchange.publish '', {id: 3, action: 'hello', params: {}}
+      queue.exchange.publish '', {},
+        {appId: 'warpgate', messageId: '1', type: 'hello'}
       queue.once 'task', (task) ->
         task.retry(0.1)
         queue.once 'task', (task) ->
@@ -61,7 +63,8 @@ describe 'TaskQueue', ->
           done()
 
     it 'should acknowlege task on success', (done) ->
-      queue.exchange.publish '', {id: 4, action: 'hello', params: {}}
+      queue.exchange.publish '', {},
+        {appId: 'warpgate', messageId: '1', type: 'hello'}
       queue.once 'task', (task) ->
         task.done()
         setTimeout(done, 100)

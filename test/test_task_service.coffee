@@ -44,7 +44,8 @@ describe 'TaskService', ->
     it 'handles message correctly', (done) ->
       service.setHandler('simple', new SimpleHandler(done))
       service.start(->
-        service.taskQueue.exchange.publish '', {id: 1, action: 'simple'}
+        service.taskQueue.exchange.publish '', {},
+          {appId: 'warpgate', messageId: '1', type: 'simple'}
       )
 
     it 'should disallow setting handler after start', ->
