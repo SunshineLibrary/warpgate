@@ -25,3 +25,11 @@ taskService.setHandler('log', new LogTaskHandler())
 
 taskService.start()
 ```
+
+
+
+Test
+---------
+```bash
+mocha --compilers coffee:coffee-script
+```
